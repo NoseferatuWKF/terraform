@@ -2,13 +2,12 @@ resource "proxmox_vm_qemu" "vms" {
     for_each    = var.vms
     vmid        = each.value.vmid
     name        = each.value.name
-    target_node = each.value.target_node
+    target_node = "proxmox"
     iso         = each.value.iso
     bios        = each.value.bios
     boot        = each.value.boot
     qemu_os     = each.value.qemu_os
     oncreate    = each.value.oncreate
-    agent       = each.value.agent
     sockets     = each.value.sockets
     cores       = each.value.cores
     cpu         = each.value.cpu
@@ -23,9 +22,12 @@ resource "proxmox_vm_qemu" "vms" {
         backup      = false
     }
 
-    network {
-        model       = each.value.model
-        bridge      = each.value.bridge
+    dynamic "network" {
+        for_each    = each.value.network
+        content {
+            model       = network.value.model
+            bridge      = network.value.bridge
+        }
     }
 
     # only root can set
@@ -34,3 +36,4 @@ resource "proxmox_vm_qemu" "vms" {
     #     host = "0000:2d:00.0"
     # }
 }
+
