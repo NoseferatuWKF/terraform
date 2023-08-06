@@ -1,8 +1,8 @@
 resource "proxmox_vm_qemu" "vms" {
     for_each    = var.vms
+    target_node = "proxmox"
     vmid        = each.value.vmid
     name        = each.value.name
-    target_node = "proxmox"
     iso         = each.value.iso
     bios        = each.value.bios
     boot        = each.value.boot
@@ -13,13 +13,13 @@ resource "proxmox_vm_qemu" "vms" {
     cpu         = each.value.cpu
     memory      = each.value.memory
     scsihw      = each.value.scsihw
-    machine     = each.value.machine
 
     disk {
         storage     = each.value.storage
         size        = each.value.size
         type        = each.value.type
         backup      = false
+        iothread    = 1
     }
 
     dynamic "network" {

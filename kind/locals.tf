@@ -8,8 +8,8 @@ locals {
                     kubeadm_config_patches  = [
                     <<-EOT
                         kind: InitConfiguration
-                        nodeRegistration: 
-                        kubeletExtraArgs: 
+                        nodeRegistration:
+                        kubeletExtraArgs:
                         node-labels: "ingress-ready=true"
                     EOT
                     ]
@@ -28,8 +28,8 @@ locals {
                     kubeadm_config_patches  = [
                     <<-EOT
                         kind: InitConfiguration
-                        nodeRegistration: 
-                        kubeletExtraArgs: 
+                        nodeRegistration:
+                        kubeletExtraArgs:
                         node-labels: "ingress-ready=true"
                     EOT
                     ]

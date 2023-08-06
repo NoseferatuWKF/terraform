@@ -17,7 +17,6 @@ locals {
                 cpu         = "host"
                 memory      = 4096
                 scsihw      = "virtio-scsi-single"
-                machine     = "q35"
                 storage     = "local-btrfs"
                 size        = "8G"
                 type        = "scsi"
@@ -46,7 +45,6 @@ locals {
                 cpu         = "host"
                 memory      = 8192
                 scsihw      = "virtio-scsi-single"
-                machine     = "q35"
                 storage     = "local-btrfs"
                 size        = "32G"
                 type        = "scsi"
@@ -70,7 +68,6 @@ locals {
             #     cpu         = "host"
             #     memory      = 16384
             #     scsihw      = "lsi"
-            #     machine     = "q35"
             #     storage     = "local-btrfs"
             #     size        = "100G"
             #     type        = "sata"
@@ -81,7 +78,6 @@ locals {
             # TODO: spice for audio and display
             pop = {
                 vmid        = 103
-                args        = "-vnc -0.0.0.0:72"
                 name        = "pop-general"
                 iso         = "local-btrfs:iso/pop-os_22.04_amd64_intel_30.iso"
                 bios        = "seabios"
@@ -93,7 +89,6 @@ locals {
                 cpu         = "host"
                 memory      = 4096
                 scsihw      = "virtio-scsi-single"
-                machine     = "q35"
                 storage     = "local-btrfs"
                 size        = "50G"
                 type        = "scsi"
@@ -117,7 +112,6 @@ locals {
                 cpu         = "host"
                 memory      = 4096
                 scsihw      = "virtio-scsi-single"
-                machine     = "q35"
                 storage     = "local-btrfs"
                 size        = "32G"
                 type        = "scsi"
@@ -141,7 +135,6 @@ locals {
                 cpu         = "host"
                 memory      = 4096
                 scsihw      = "virtio-scsi-single"
-                machine     = "q35"
                 storage     = "local-btrfs"
                 size        = "32G"
                 type        = "scsi"
@@ -165,7 +158,6 @@ locals {
                 cpu         = "host"
                 memory      = 2048
                 scsihw      = "virtio-scsi-single"
-                machine     = "q35"
                 storage     = "local-btrfs"
                 size        = "32G"
                 type        = "scsi"
@@ -173,6 +165,29 @@ locals {
                     {
                         model       = "virtio"
                         bridge      = "vmbr0"
+                    }
+                ]
+            }
+            demo = {
+                vmid        = 109
+                name        = "pop-demo"
+                iso         = "local-btrfs:iso/pop-os_22.04_amd64_intel_30.iso"
+                bios        = "seabios"
+                boot        = "order=scsi0;ide2;net0"
+                qemu_os     = "l26"
+                oncreate    = false
+                sockets     = 1
+                cores       = 2
+                cpu         = "host"
+                memory      = 4096
+                scsihw      = "virtio-scsi-single"
+                storage     = "local-btrfs"
+                size        = "50G"
+                type        = "scsi"
+                network     = [
+                    {
+                        model       = "virtio"
+                        bridge      = "vmbr1"
                     }
                 ]
             }
