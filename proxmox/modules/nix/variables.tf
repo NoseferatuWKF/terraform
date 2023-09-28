@@ -1,5 +1,4 @@
-
-variable "vms" {
+variable "nix" {
     type            = any
     default         = {}
 }

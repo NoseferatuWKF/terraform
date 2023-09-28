@@ -9,3 +9,7 @@ variable "pm_api_token_id" {
 variable "pm_api_token_secret" {
     type            = string
 }
+
+variable "lxc_public_key" {
+    type            = string
+}

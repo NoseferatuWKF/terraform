@@ -1,9 +1,8 @@
-# TODO: clone from template
+# TODO: separate vm to smaller contexts around 3 vm per context, as the plugin cannot handle too many vms
 locals {
     resource_map = {
-        vms = {
+        core = {
             # TODO: wireguard
-            # TODO: add LAN bridge
             vpn = {
                 vmid        = 100
                 name        = "vpn"
@@ -31,7 +30,7 @@ locals {
                     }
                 ]
             }
-            # TODO: setup dsk passthrough
+            # TODO: setup disk passthrough
             nas = {
                 vmid        = 101
                 name        = "NAS"
@@ -55,50 +54,33 @@ locals {
                     }
                 ]
             }
-            # windows = {
-            #     vmid        = 102
-            #     name        = "gaming"
-            #     iso         = "local-btrfs:iso/Win11_22H2_English_x64v2.iso"
-            #     bios        = "ovmf"
-            #     boot        = "order=ide2;scsi0;net0"
-            #     qemu_os     = "win11"
-            #     oncreate    = false
-            #     sockets     = 1
-            #     cores       = 8
-            #     cpu         = "host"
-            #     memory      = 16384
-            #     scsihw      = "lsi"
-            #     storage     = "local-btrfs"
-            #     size        = "100G"
-            #     type        = "sata"
-            #     model       = "virtio"
-            #     bridge      = "vmbr1"
-            # }
-            # TODO: automate post-installtion with ansible container
-            # TODO: spice for audio and display
-            pop = {
-                vmid        = 103
-                name        = "pop-general"
-                iso         = "local-btrfs:iso/pop-os_22.04_amd64_intel_30.iso"
-                bios        = "seabios"
-                boot        = "order=scsi0;ide2;net0"
-                qemu_os     = "l26"
-                oncreate    = false
-                sockets     = 1
-                cores       = 2
-                cpu         = "host"
-                memory      = 4096
-                scsihw      = "virtio-scsi-single"
-                storage     = "local-btrfs"
-                size        = "50G"
-                type        = "scsi"
-                network     = [
-                    {
-                        model       = "virtio"
-                        bridge      = "vmbr1"
-                    }
-                ]
+        }
+        pop = {
+            general = {
+                    vmid        = 103
+                    name        = "pop-general"
+                    iso         = "local-btrfs:iso/pop-os_22.04_amd64_intel_30.iso"
+                    bios        = "seabios"
+                    boot        = "order=scsi0;ide2;net0"
+                    qemu_os     = "l26"
+                    oncreate    = false
+                    sockets     = 1
+                    cores       = 2
+                    cpu         = "host"
+                    memory      = 4096
+                    scsihw      = "virtio-scsi-single"
+                    storage     = "local-btrfs"
+                    size        = "50G"
+                    type        = "scsi"
+                    network     = [
+                        {
+                            model       = "virtio"
+                            bridge      = "vmbr1"
+                        }
+                    ]
             }
+        }
+        nix = {
             kubernetes = {
                 vmid        = 104
                 name        = "nix-kubernetes"
@@ -119,29 +101,6 @@ locals {
                     {
                         model       = "virtio"
                         bridge      = "vmbr0"
-                    }
-                ]
-            }
-            hacking = {
-                vmid        = 105
-                name        = "kali-hacking"
-                iso         = "local-btrfs:iso/kali-linux-2023.2a-installer-amd64.iso"
-                bios        = "seabios"
-                boot        = "order=scsi0;ide2;net0"
-                qemu_os     = "l26"
-                oncreate    = false
-                sockets     = 1
-                cores       = 2
-                cpu         = "host"
-                memory      = 4096
-                scsihw      = "virtio-scsi-single"
-                storage     = "local-btrfs"
-                size        = "32G"
-                type        = "scsi"
-                network     = [
-                    {
-                        model       = "virtio"
-                        bridge      = "vmbr1"
                     }
                 ]
             }
@@ -168,10 +127,12 @@ locals {
                     }
                 ]
             }
-            demo = {
-                vmid        = 109
-                name        = "pop-demo"
-                iso         = "local-btrfs:iso/pop-os_22.04_amd64_intel_30.iso"
+        }
+        kali = {
+            hacking = {
+                vmid        = 105
+                name        = "kali-hacking"
+                iso         = "local-btrfs:iso/kali-linux-2023.2a-installer-amd64.iso"
                 bios        = "seabios"
                 boot        = "order=scsi0;ide2;net0"
                 qemu_os     = "l26"
@@ -182,7 +143,7 @@ locals {
                 memory      = 4096
                 scsihw      = "virtio-scsi-single"
                 storage     = "local-btrfs"
-                size        = "50G"
+                size        = "32G"
                 type        = "scsi"
                 network     = [
                     {
@@ -193,13 +154,14 @@ locals {
             }
         }
         lxc = {
+            # TODO: automate post-installation with ansible container
             ansible = {
                 vmid                = 107
                 hostname            = "ansible"
                 ostemplate          = "local-btrfs:vztmpl/alpine-3.18-default_20230607_amd64.tar.xz"
                 storage             = "local-btrfs"
                 size                = "512M"
-                bridge              = "vmbr1"
+                bridge              = "vmbr0"
             }
             tensorflow = {
                 vmid                = 108
@@ -207,11 +169,17 @@ locals {
                 ostemplate          = "local-btrfs:vztmpl/alpine-3.18-default_20230607_amd64.tar.xz"
                 storage             = "local-btrfs"
                 size                = "512M"
-                bridge              = "vmbr1"
+                bridge              = "vmbr0"
             }
         }
     }
 
-    vms = lookup(local.resource_map, "vms", {})
+    # VMs
+    core = lookup(local.resource_map, "core", {})
+    pop = lookup(local.resource_map, "pop", {})
+    nix = lookup(local.resource_map, "nix", {})
+    kali = lookup(local.resource_map, "kali", {})
+
+    # Containers
     lxc = lookup(local.resource_map, "lxc", {})
 }

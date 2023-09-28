@@ -1,5 +1,5 @@
-resource "proxmox_vm_qemu" "vms" {
-    for_each    = var.vms
+resource "proxmox_vm_qemu" "pop" {
+    for_each    = var.pop
     target_node = "proxmox"
     vmid        = each.value.vmid
     name        = each.value.name
