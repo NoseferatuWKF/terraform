@@ -1,4 +1,3 @@
-# TODO: separate vm to smaller contexts around 3 vm per context, as the plugin cannot handle too many vms
 locals {
     resource_map = {
         core = {
@@ -162,6 +161,8 @@ locals {
                 storage             = "local-btrfs"
                 size                = "512M"
                 bridge              = "vmbr0"
+                cores               = 1
+                memory              = 512
             }
             tensorflow = {
                 vmid                = 108
@@ -170,6 +171,8 @@ locals {
                 storage             = "local-btrfs"
                 size                = "512M"
                 bridge              = "vmbr0"
+                cores               = 1
+                memory              = 512
             }
         }
     }

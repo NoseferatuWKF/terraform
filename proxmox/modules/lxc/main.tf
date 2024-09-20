@@ -5,6 +5,8 @@ resource "proxmox_lxc" "containers" {
     target_node     = "proxmox"
     ostemplate      = each.value.ostemplate
     unprivileged    = true
+    cores           = each.value.cores
+    memory          = each.value.memory
 
     ssh_public_keys = var.lxc_public_key
 
